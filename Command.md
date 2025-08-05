@@ -57,3 +57,9 @@ $ cnpm install -g create-react-app
 $ create-react-app my-app
 $ cd my-app/
 $ npm start
+
+
+链接合约的方式
+
+使用metamask 
+直接使用服务器地址
