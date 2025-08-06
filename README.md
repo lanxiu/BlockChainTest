@@ -76,14 +76,14 @@ npx hardhat node
 
 
 编写合约,如果没有的话
-cd contracts
-touch greeter.sol
+cd contracts  
+touch greeter.sol  
 
 进入容器执行命令
-docker ps
-docker exec -it 《container id》 bash
-编译
-npx hardhat compile
+docker ps  
+docker exec -it 《container id》 bash  
+编译  
+npx hardhat compile  
 
 
 部署
@@ -110,8 +110,11 @@ Currency Symbol: ETH
 
 
 
+#### hardhat  测试脚本
+测试部署后的合约各方法调用
 
-
+npx hardhat test
+npx hardhat test test/ballot.test.js
 
 
 
