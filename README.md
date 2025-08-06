@@ -18,3 +18,6 @@ pom.xml:    java web3j的依赖
 
 
 ### 环境:
+
+
+https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html#voting
