@@ -63,3 +63,9 @@ $ npm start
 
 使用metamask 
 直接使用服务器地址
+
+npx hardhat run scripts/deploy.js
+
+npx hardhat run scripts/daoDeploy.js --network localhost
+
+npx hardhat verify 0x5FbDB2315678afecb367f032d93F642f64180aa3
