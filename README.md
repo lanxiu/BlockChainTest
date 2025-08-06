@@ -1,1 +1,3 @@
-# BlockChainTest
+# 基于区块链的投票系统
+
+目的:
