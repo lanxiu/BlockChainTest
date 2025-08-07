@@ -195,4 +195,157 @@ ballot test
 
 formatBytes32String改成encodeBytes32String
 
+
+#### okhttp 版本冲突
+
+写的测试代码在一个springboot工程里,和web3j要求的okhttp版本冲突  
+新建一个工程,无须指定okhttp,web3j包里有自动依赖
+
+~~~
+Exception in thread "main" java.lang.NoSuchMethodError: okhttp3.RequestBody.create(Ljava/lang/String;Lokhttp3/MediaType;)Lokhttp3/RequestBody;
+	at org.web3j.protocol.http.HttpService.performIO(HttpService.java:153)
+	at org.web3j.protocol.Service.send(Service.java:48)
+	at org.web3j.protocol.core.Request.send(Request.java:87)
+	at TestBlock.main(TestBlock.java:25)
+~~~
+
+~~~
+Exception in thread "main" java.lang.NoSuchMethodError: okhttp3.RequestBody.create(Ljava/lang/String;Lokhttp3/MediaType;)Lokhttp3/RequestBody;
+	at org.web3j.protocol.http.HttpService.performIO(HttpService.java:153)
+	at org.web3j.protocol.Service.send(Service.java:48)
+	at org.web3j.protocol.core.Request.send(Request.java:87)
+~~~
+
+
+#### java 编译版本低
+
+idea中的工程 模块的有个level是5,工程是8
+File → Project Structure  → project/module  → Language level
+设置为8
+~~~
+static interface  language level 5 not support   what's the mean
+~~~
+
+#### target 版本未指定
+
+~~~
+source release8  require target release 8
+~~~
+
+添加
+~~~
+<properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+</properties>
+
+<build>
+    <plugins>
+        <!-- Maven Compiler Plugin 确保添加 -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.10.1</version> <!-- 版本可用最新的 -->
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+
+~~~
+
+#### slf4j  未指定
+
+~~~
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+~~~
+添加
+~~~
+<dependency>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-simple</artifactId>
+  <version>1.7.36</version>
+</dependency>
+
+~~~
+
+
+#### 钱包的文件问题
+
+目录不能自动创建
+~~~
+户地址: 0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199
+direct get the address:
+ETH Balance: 9999.999497213857421875
+Exception in thread "main" java.io.FileNotFoundException: ./wallets/your-wallet-file.json (No such file or directory)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at c
+~~~
+
+
+文件不需要创建
+~~~
+direct get the address:
+ETH Balance: 9999.999497213857421875
+Exception in thread "main" java.io.FileNotFoundException: ./wallets/your-wallet-file.json/UTC--2025-07-30T03-33-49.755000000Z--1060a24b2f3a57c7d8635174ab9d21d688eda0fe.json (No such file or directory)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+~~~
+
+
+####  第二天重启后 leader20 服务器ping 不通  meta mask 钱包不能连接
+
+~~~
+lens-MacBook-Pro:~ lenchol$ ping leader20
+PING leader20 (192.168.174.20): 56 data bytes
+Request timeout for icmp_seq 0
+Request timeout for icmp_seq 1
+ping: sendto: No route to host
+Request timeout for icmp_seq 2
+ping: sendto: Host is down
+Request timeout for icmp_seq 3
+ping: sendto: Host is down
+Request timeout for icmp_seq 4
+ping: sendto: Host is down
+Request timeout for icmp_seq 5
+ping: sendto: Host is down
+Request timeout for icmp_seq 6
+ping: sendto: Host is down
+Request timeout for icmp_seq 7
+ping: sendto: Host is down
+Request timeout for icmp_seq 8
+^C
+--- leader20 ping statistics ---
+10 packets transmitted, 0 packets received, 100.0% packet loss
+lens-MacBook-Pro:~ lenchol$ ping 192.168.174.20
+PING 192.168.174.20 (192.168.174.20): 56 data bytes
+64 bytes from 192.168.174.20: icmp_seq=0 ttl=128 time=70.860 ms
+64 bytes from 192.168.174.20: icmp_seq=1 ttl=128 time=0.793 ms
+64 bytes from 192.168.174.20: icmp_seq=2 ttl=128 time=1.635 ms
+64 bytes from 192.168.174.20: icmp_seq=3 ttl=128 time=0.467 ms
+64 bytes from 192.168.174.20: icmp_seq=4 ttl=128 time=0.466 ms
+64 bytes from 192.168.174.20: icmp_seq=5 ttl=128 time=1.536 ms
+64 bytes from 192.168.174.20: icmp_seq=6 ttl=128 time=0.437 ms
+^C
+--- 192.168.174.20 ping statistics ---
+7 packets transmitted, 7 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 0.437/10.885/70.860/24.489 ms
+lens-MacBook-Pro:~ lenchol$ ping leader20
+PING leader20 (192.168.174.20): 56 data bytes
+64 bytes from 192.168.174.20: icmp_seq=0 ttl=128 time=0.511 ms
+64 bytes from 192.168.174.20: icmp_seq=1 ttl=128 time=0.609 ms
+~~~
+
+
+
+
+
+
+
 不得不说gpt时真坑人
