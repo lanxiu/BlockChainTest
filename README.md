@@ -3,6 +3,7 @@
 ### 目的:
 完成了一个完整功能链路的投票系统.  
 基于 react(前端) + ethers v6(合约操作) + MetaMask(钱包管理) + hardhat(本地链)
+java部分是测试,和Dapp无关
 
 ### 目录介绍:
 
