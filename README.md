@@ -154,5 +154,42 @@ npm start
 访问http://ip:3000 应该能看到页面
 连接钱包,添加提案,投票,查看结果
 
+#### java 调用区块链(可选操作,仅有测试用例,和Dapp无关)
++ 安装jdk21 和 web3j 工具
++ 生成abi(接口定义) 和 bin (执行字节码) 两个文件
++ 生成 java文件
++ 调用代码验证结果
+
+##### jq 安装(废弃)
+yum install -y jq   
+jq '.abi' Ballot.json > Ballot.abi   
+jq -r '.bytecode' Ballot.json > Ballot.bin   
+
+~~~
+wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+chmod +x jq
+mv jq /usr/local/bin/
+~~~
+
+
+##### solcjs安装
+生成abi和bin文件
+
+
+  ##### web3j 安装
+curl -L get.web3j.io | sh
+
+文件下载不了,最后手动下载,然后根据脚本文件手动安装
+
+
+~~~
+web3j solidity generate \
+  -b Ballot.bin \
+  -a Ballot.abi \
+  -o ./src/main/java \
+  -p com.example.contracts
+~~~
+  
+
 
 https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html#voting
