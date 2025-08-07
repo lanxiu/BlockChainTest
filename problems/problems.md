@@ -301,6 +301,8 @@ Exception in thread "main" java.io.FileNotFoundException: ./wallets/your-wallet-
 
 ####  第二天重启后 leader20 服务器ping 不通  meta mask 钱包不能连接
 
+重启chrome解决
+
 ~~~
 lens-MacBook-Pro:~ lenchol$ ping leader20
 PING leader20 (192.168.174.20): 56 data bytes
@@ -343,21 +345,128 @@ PING leader20 (192.168.174.20): 56 data bytes
 ~~~
 
 
+#### jq 找不到
 
-####  java 合约文件生成(巨坑,被gpt挖的坑绕圈子绕了三天)
+~~~
+root@localhost Voting.sol]# yum install -y jq
+Failed to set locale, defaulting to C
+Loaded plugins: fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+ * base: mirrors.aliyun.com
+ * extras: mirrors.aliyun.com
+ * updates: mirrors.aliyun.com
+base                                                                                                                                                                                 | 3.6 kB  00:00:00     
+docker-ce-stable                                                                                                                                                                     | 3.5 kB  00:00:00     
+extras                                                                                                                                                                               | 2.9 kB  00:00:00     
+updates                                                                                                                                                                              | 2.9 kB  00:00:00     
+No package jq available.
+Error: Nothing to do
+~~~
 
-生成.abi 和 .bin文件
-jq 方式
+#### byte32的问题
 
-web3j 方式
+java侧报错
+~~~
 
+Exception in thread "main" org.web3j.abi.TypeMappingException: java.lang.reflect.InvocationTargetException
+	at org.web3j.abi.Utils.typeMap(Utils.java:238)
+	at Ballot.deploy(Ballot.java:174)
+	at BallotCaller.main(BallotCaller.java:58)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.web3j.abi.Utils.typeMap(Utils.java:232)
+	... 2 more
+Caused by: java.lang.UnsupportedOperationException: Input byte array must be in range 0 < M <= 32 and length must match type
+	at org.web3j.abi.datatypes.Bytes.<init>(Bytes.java:23)
+	at org.web3j.abi.datatypes.generated.Bytes32.<init>(Bytes32.java:15)
+	... 7 more
+~~~
+hardhat侧报错
+~~~
+eth_getTransactionCount
+eth_sendRawTransaction
+  Contract deployment: <UnrecognizedContract>
+  Transaction:         0x7fea7aa0f69884ed623e159bd7f171e50854e37351cffc04bc459b99870e1c4b
+  From:                0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199
+  Value:               0 ETH
+  Gas used:            4700000 of 4700000
+  Block #2:            0x84e2f936782efb292b7dc14c7b8327bfb8b924f1bb97685e4a3b0e63ab65dfa4
 
+  TransactionExecutionError: StackUnderflow
+~~~
 
+~~~
+irect get the address:
+ETH Balance: 9999.718
+Exception in thread "main" org.web3j.protocol.exceptions.TransactionException: {"message":"Error: Transaction reverted without a reason string","txHash":"0xf1109cb69106b28bb097bb76ca1cd2b55a8cedc5db2bc619e92e2cd50646f66f","data":"0x"}
+	at org.web3j.tx.Contract.executeTransaction(Contract.java:421)
+	at org.web3j.tx.Contract.create(Contract.java:479)
+	at org.web3j.tx.Contract.deploy(Contract.java:513)
+	at org.web3j.tx.Contract.lambda$deployRemoteCall$7(Contract.java:665)
+	at org.web3j.protocol.core.RemoteCall.send(RemoteCall.java:42)
+	at BallotCaller.main(BallotCaller.java:48)
 
+~~~
 
+~~~
 
+direct get the address:
+ETH Balance: 9999.436
+Exception in thread "main" java.lang.RuntimeException: com.fasterxml.jackson.databind.JsonMappingException: Can not deserialize instance of java.lang.String out of START_OBJECT token
+ at [Source: buffer(okhttp3.internal.http1.Http1Codec$ChunkedSource@78691363).inputStream(); line: 1, column: 118] (through reference chain: org.web3j.protocol.core.methods.response.EthSendTransaction["error"]->org.web3j.protocol.core.Response$Error["data"])
+	at org.web3j.tx.Contract.deploy(Contract.java:302)
+	at org.web3j.tx.Contract.lambda$deployRemoteCall$5(Contract.java:334)
+	at org.web3j.protocol.core.RemoteCall.send(RemoteCall.java:30)
+	at BallotCaller.main(BallotCaller.java:64)
+Caused by: com.fasterxml.jackson.databind.JsonMappingException: Can not deserialize instance of java.lang.String out of START_OBJECT token
+ at [Source: buffer(okhttp3.internal.http1.Http1Codec$ChunkedSource@78691363).inputStream(); line: 1, column: 118] (through reference chain: org.web3j.protocol.core.methods.response.EthSendTransaction["error"]->org.web3j.protocol.core.Response$Error["data"])
+	at com.fasterxml.jackson.databind.JsonMappingException.from(JsonMappingException.java:270)
+	at com.fasterxml.jackson.databind.DeserializationContext.reportMappingException(DeserializationContext.java:1234)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnexpectedToken(DeserializationContext.java:1122)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnexpectedToken(DeserializationContext.java:1075)
+	at com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize(StringDeserializer.java:60)
+	at com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize(StringDeserializer.java:11)
+	at com.fasterxml.jackson.databind.deser.SettableBeanProperty.deserialize(SettableBeanProperty.java:499)
+	at com.fasterxml.jackson.databind.deser.impl.MethodProperty.deserializeAndSet(MethodProperty.java:101)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:276)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:140)
+	at com.fasterxml.jackson.databind.deser.SettableBeanProperty.deserialize(SettableBeanProperty.java:499)
+	at com.fasterxml.jackson.databind.deser.impl.MethodProperty.deserializeAndSet(MethodProperty.java:101)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:276)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:140)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:3798)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:2908)
+	at org.web3j.protocol.Service.send(Service.java:33)
+	at org.web3j.protocol.core.Request.send(Request.java:71)
+	at org.web3j.tx.RawTransactionManager.signAndSend(RawTransactionManager.java:107)
+	at org.web3j.tx.RawTransactionManager.sendTransaction(RawTransactionManager.java:91)
+	at org.web3j.tx.TransactionManager.executeTransaction(TransactionManager.java:49)
+	at org.web3j.tx.ManagedTransaction.send(ManagedTransaction.java:83)
+	at org.web3j.tx.Contract.executeTransaction(Contract.java:242)
+	at org.web3j.tx.Contract.create(Contract.java:271)
+	at org.web3j.tx.Contract.deploy(Contract.java:300)
+	... 3 more
 
+Process finished with exit code 1
+~~~
 
+AI十分喜欢拿着es5的写法给es6环境用,如果不强调的话
+~~~
+
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new DynamicArray<>(Bytes32.class, bytes32List)));
+
+new DynamicArray<>  report error can not infer arguments
+~~~
+
+解决方案1:失败
+
+因为合约是0.4编译,java用的web3j 4.x 支持的是0.8  
+所以我回退 web3j 3.x ,但是3.x不是地址不正确,就是编译失败  
+这些都是AI给我的答案.使用了3.x后,  
+又按照3.x的写法更改 javatype和gas 消耗,还是失败
 
 
 
