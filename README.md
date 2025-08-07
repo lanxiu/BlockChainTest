@@ -79,7 +79,7 @@ npx hardhat node
 
 #### 编译合约,部署合约
 
-编写合约,如果没有的话
+编写合约,如果没有的话,拷贝工程目录下的
 ~~~
 cd contracts  
 touch greeter.sol
@@ -103,6 +103,11 @@ cd scripts
 touch greeterDeploy.js
 // 部署到链上
 npx hardhat run scripts/greeterDeploy.js --network localhost
+
+npx hardhat run scripts/daoDeploy.js --network localhost
+记下这个部署打印的合约地址,做Dapp展示时会用到
+
+
 ~~~
 
 *具体文件内容参考工程下的文件*
@@ -128,6 +133,25 @@ npx hardhat test
 npx hardhat test test/ballot.test.js
 ~~~
 
+
+#### 创建 Dapp前端简易界面
+
+安装react环境
+
+~~~
+ npm install -g cnpm --registry=https://registry.npmmirror.com
+ npm config set registry https://registry.npmmirror.com
+ cnpm install -g create-react-app
+ create-react-app my-app
+ cd my-app/src
+// 用本工程下的替换App.js,并且将文件中的DAO_ADDRESS 的地址替换为上边部署合约时生成的地址
+//重新进入my-app目录,启动服务器
+cd ..
+npm start
+~~~
+
+访问http://ip:3000 应该能看到页面
+连接钱包,添加提案,投票,查看结果
 
 
 https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html#voting
