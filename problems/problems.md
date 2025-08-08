@@ -558,5 +558,51 @@ const DAO_ABI = [
 
 ####   复制在本地可以使用,在远程机器vim上无法使用  蛋疼的问题,未解决
 
+####  commonjs 与 es的语法
+
+把你的 deploy.js 改成 CommonJS 写法，示例如下：
+
+js
+Copy
+Edit
+const { ethers } = require("ethers");
+const fs = require("fs");
+
+~~~
+
+root@13737bcc7748:/app/scripts# node deploy.js 
+(node:479) Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/app/scripts/deploy.js:1
+import { ethers } from "ethers";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at internalCompileFunction (node:internal/vm:76:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+    at Module._compile (node:internal/modules/cjs/loader:1328:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Module.load (node:internal/modules/cjs/loader:1203:32)
+    at Module._load (node:internal/modules/cjs/loader:1019:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)
+    at node:internal/main/run_main_module:28:49
+~~~
+
+#### 又是版本问题 e5 e6
+
+ 
+在 ethers v6 中，deploy() 返回的合约实例没有 deployTransaction，而是用 deployTransaction 改成了 deployTransaction 或直接在 contract.deploymentTransaction() 方法里获取。
+
+
+console.log("部署交易哈希:", contract.deploymentTransaction().hash);
+
+~~~
+root@13737bcc7748:/app/scripts# node deploy.js 
+TypeError: Cannot read properties of undefined (reading 'hash')
+    at main (/app/scripts/deploy.js:24:55)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+~~~
+
+
 
 不得不说gpt时真坑人
