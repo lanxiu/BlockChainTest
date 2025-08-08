@@ -527,6 +527,36 @@ could not coalesce error (error={ "code": -32002, "message": "Request of type 'w
 问题的来源其实是我把服务器地址8545当作合约地址填写进去了,
 由此了解到前端并不需要知道服务器地址,有合约地址就可以操作
 
+#### react 局部变量和全局变量的作用域问题
+
+React 的 setContract 是异步更新状态，不会马上改变 contract 变量的值
+
+如果你紧接着写 contract.on(...)，此时 contract 还是旧值（可能是 null 或 undefined）
+
+监听函数挂载失败，自然收不到事件
+
+
+#### 监听事件无效问题
+
+1 未在ABI中声明事件
+2 使用了为初始化的全局域
+3 声明后漏了半个引号
+4 复制在本地可以使用,在远程机器vim上无法使用  蛋疼的问题,未解决
+
+~~~
+
+const DAO_ABI = [
+  "function proposalCount() view returns (uint256)",
+  "function createProposal(string description)",
+  "function vote(uint256 proposalId, bool support)",
+  "function getVotes(uint256 proposalId) view returns (uint256 forVotes, uint256 againstVotes)",
+  "function getProposalDescription(uint256 proposalId) view returns (string)",
+  "event Voted(address voter,uint proposalId,bool support)"
+];
+
+~~~
+
+####   复制在本地可以使用,在远程机器vim上无法使用  蛋疼的问题,未解决
 
 
 不得不说gpt时真坑人
