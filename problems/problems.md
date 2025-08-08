@@ -468,7 +468,64 @@ new DynamicArray<>  report error can not infer arguments
 这些都是AI给我的答案.使用了3.x后,  
 又按照3.x的写法更改 javatype和gas 消耗,还是失败
 
+#### provider获取的版本问题
 
+V5  
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+V6  
+const provider = new ethers.BrowserProvider(window.ethereum);
+
+
+
+~~~
+export 'ethers'.'providers' (imported as 'ethers') was not found in 'ethers' (possible exports: AbiCoder, AbstractProvider, AbstractSigner, AlchemyProvider, AnkrProvider, BaseContract, BaseWallet, Block, BlockscoutProvider, BrowserProvider, ChainstackProvider, CloudflareProvider, ConstructorFragment, Contract, ContractEventPayload, ContractFactory, ContractTransactionReceipt, ContractTransactionResponse, ContractUnknownEventPayload, EnsPlugin, EnsResolver, ErrorDescription, ErrorFragment, EtherSymbol, Ethers
+
+~~~
+
+
+#### 重复请求问题
+
+防止重复调用
+
+~~~
+const [isConnecting, setIsConnecting] = useState(false);
+
+async function connectWallet() {
+  if (isConnecting) return; // 防止重复
+  setIsConnecting(true);
+  try {
+    await provider.send("eth_requestAccounts", []);
+    // 其他逻辑
+  } catch (e) {
+    // 处理异常
+  } finally {
+    setIsConnecting(false);
+  }
+}
+
+~~~
+
+~~~
+could not coalesce error (error={ "code": -32002, "message": "Request of type 'wallet_requestPermissions' already pending for origin http://leader20:3000. Please wait." }, payload={ "id": 2, "jsonrpc": "2.0", "method": "eth_requestAccounts", "params": [  ] }, code=UNKNOWN_ERROR, version=6.15.0)
+    at makeError (http://leader20:3000/static/js/bundle.js:17807:15)
+    at BrowserProvider.getRpcError (http://leader20:3000/static/js/bundle.js:13839:70)
+    at BrowserProvider.getRpcError (http://leader20:3000/static/js/bundle.js:12849:18)
+    at http://leader20:3000/static/js/bundle.js:13321:29
+~~~
+
+
+
+#### ENS解析问题
+
+没用到ENS,但是方法里有ENS寻址
+
+~~~
+创建失败：network does not support ENS (operation="getEnsAddress", info={ "network": { "chainId": "31337", "name": "unknown" } }, code=UNSUPPORTED_OPERATION, version=6.15.0)
+~~~
+
+问题的来源其实是我把服务器地址8545当作合约地址填写进去了,
+由此了解到前端并不需要知道服务器地址,有合约地址就可以操作
 
 
 
