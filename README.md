@@ -190,6 +190,12 @@ web3j solidity generate \
   -p com.example.contracts
 ~~~
   
+#### 部署到测试链 Sepolia
 
+获取 Infura Project ID 的步骤
+访问 https://infura.io/ 并注册账号（免费）
 
+登录后，进入 Dashboard
+进去后就给一个firstkey,然后可以看到一串endpoint,即是区块链的链接地址
+ 
 https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html#voting
