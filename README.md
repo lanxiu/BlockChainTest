@@ -197,5 +197,10 @@ web3j solidity generate \
 
 登录后，进入 Dashboard
 进去后就给一个firstkey,然后可以看到一串endpoint,即是区块链的链接地址
+
+
+
+查看测试链上的合约详细列表,改为自己的合约地址
+https://sepolia.etherscan.io/address/0xbf45d89ca9e71bF1D174ac8845Ca82fef0D2f28b
  
 https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html#voting
