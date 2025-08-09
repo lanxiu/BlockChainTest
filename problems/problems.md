@@ -605,4 +605,50 @@ TypeError: Cannot read properties of undefined (reading 'hash')
 
 
 
+####  chainid 不正确
+
+
+合约用的sepolia 链上的地址,但是钱包还连接着本地网络
+
+
+ 
+如果用 Metamask 的 signer 调用，需要在 Metamask 里切到 Sepolia 网络，
+Metamask 里也要设置 chainId 为 11155111：
+
+ ~~~
+await window.ethereum.request({
+  method: "wallet_switchEthereumChain",
+  params: [{ chainId: "0xAA36A7" }], // 11155111 十六进制
+});
+~~~
+
+
+####  检测请求失败频率高
+
+等一会
+
+~~~
+could not coalesce error
+isBrokenCircuitError: true
+Execution prevented because the circuit breaker is open
+~~~
+
+####  metamask账户切换
+切换到有测试币的账户
+
+#### 恶意地址提示
+
+大部分新部署的合约地址都会被提示为恶意地址,可通过Etherscan 验证合约
+
+~~~
+If you confirm this request, you will probably lose your assets to a scammer.    metamask的alert
+
+Suspicious address
+
+0xbf45d...2f28b
+
+This has been identified as suspicious. If you trust this author, set a personal display name to identify it going forward.
+~~~
+
+
 不得不说gpt时真坑人
